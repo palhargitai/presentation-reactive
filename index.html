@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Reactive Programming</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<style>
+.reveal .slides h1, .reveal .slides h2, .reveal .slides h3, .reveal .slides h4, .reveal .slides h5, .reveal .slides h6 {
+	text-transform: none;
+};
+		</style>
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+<section id="slide01">
+  <h1>How do I make my application more reactive?</h1>
+</section>
+
+<section id="slide02">
+  <h2>What is reactive programming?</h2>
+  <h3>A reactive system is; responsive, resilient, elastic and message driven.</h3>
+</section>
+
+<section id="slide03">
+  <h3>Responsive: The system responds in a timely manner if at all possible.</h3>
+</section>
+<section id="slide04">
+  <h3>Resilient: The system stays responsive in the face of failure.</h3>
+</section>
+<section id="slide05">
+  <h3>Elastic: The system stays responsive under varying workload. </h3>
+</section>
+<section id="slide06">
+  <h3>Message Driven: Reactive Systems rely on asynchronous message-passing to establish a boundary 
+  between components that ensures loose coupling, isolation, location transparency, and provides 
+  the means to delegate errors as messages.</h3>
+</section>
+<section id="slide07">
+  <h2>Large Fundamental problem with everything you're about to see!</h2>
+  <ul>
+    <li>It's requires green-field,</li>
+    <li>It requires dedicated infrastructure,</li>
+    <li>It's largely incompatible with JEE,</li>
+    <li>It requires a lot of expertise.</li>
+  </ul>
+</section>
+<section id="slide08">
+  <h2>Why then?</h2>
+  <ul>
+    <li>It's principles are transforming the world around us! <br/><b>Major game changer!</b></li>
+    <li>Expect transformation within our domain over the next few years.</li>
+    <li>Our work/products can improve when we apply these principles.</li>
+  </ul>
+</section>
+<section id="slide09">
+  <img src="reactive_map.png" class="stretch" />
+</section>
+<section id="slide10">
+  <h2>A lot of excess baggage...</h2>
+</section>
+<section id="slide11">
+  <h2>Event &amp; Message Driven...</h2>
+  <h2>Observer Pattern!</h2>
+</section>
+<section id="slide12">
+  <table>
+    <tr><th>event</th><th>Iterable(pull)</th><th>Observable(push)</th></tr>
+    <tr><td>retrieve data</td><td>T next()</td><td>onNext(T)</td></tr>
+    <tr><td>discover error</td><td>throws Exception</td><td>onError(Exception)</td></tr>
+    <tr><td>complete</td><td>!hasNext()</td><td>onCompleted()</td></tr>
+  </table>
+</section>
+<section id="slide13">
+  <h2>Detach the how from the where.</h2>
+  <h2>Instead of imperatively define a flow, define a stream of events to break free from waiting for everything to be done.</h2>
+</section>
+<section id="slide14">
+  <h2>Resilient</h2>
+  <h3>Streams can be broken off, delayed, rerouted.</h3>
+</section>
+<section id="slide15">
+  <h2>Elastic</h2>
+  <h3>Messages can be forgotten, distributed and delayed.</h3>
+</section>
+<section id="slide16">
+  <ul>
+    <li>RxJava
+    <ul><li>Hystrix (RxJava with Fault Tolerance)</li></ul></li>
+    <li>Akka<br />
+    <ul><li>Play (Akka based framework for Web Applications)</li></ul></li>
+    <li>VertX</li>
+  </ul>
+</section>
+<section id="slide17">
+  <h2>RxJava</h2>
+  <h3>library for composing asynchronous and event-based programs by using observable sequences</h3>
+  <pre><code>
+getDataFromNetwork()
+  .skip(10)
+  .take(5)
+  .map({ s -> return s + " transformed" })
+  .subscribe({ println "onNext => " + it })
+
+def hello(String[] names) {
+    Observable.from(names).subscribe { println "Hello ${it}!" }
+}
+  </code></pre>
+</section>
+<section id="slide18">
+  <h2>Akka</h2>
+  <ul>
+    <li>Actor System</li>
+    <li>Actor is state &amp; behaviour</li>
+    <li>Actor only acts on Messages</li>
+    <li>Actor emits messages (eg. to Sender or another Actor)</li>
+  </ul>
+</section>
+<section id="slide19">
+  <h2>Vert.X</h2>
+  <pre><code>
+var vertx = require('vertx');
+
+vertx.createHttpServer().requestHandler(function(req) {
+  req.response.end("Hello World!");
+}).listen(8080, 'localhost');
+</code></pre>
+</section>
+<section id="slide20">
+  <p>That's:</p>
+  <ol>
+    <li>a lot of work</li>
+    <li>excessive for simple queries</li>
+  </ol>
+</section>
+<section id="slide21">
+  <h2>CQRS</h2>
+  <h3>Command and Query Responsibility Segregation</h3>
+  <img src="cqrs.png" class="stretch" />
+  <p><small>From: https://msdn.microsoft.com/en-us/library/dn568103.aspx</small></p>
+</section>
+<section id="slide22">
+  <h2>So…. we're building a lot of tiny services?</h2>
+</section>
+<section id="slide23">
+  <h2>Yes! Reactive invites the use of MicroServices!</h2>
+</section>
+<section id="slide24">
+  <h2>MicroServices</h2>
+  <p>“In short, the microservice architectural style is an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API.”</p>
+</section>
+<section id="slide25">
+  <h2>MicroService containers/helpers/frameworks</h2>
+  <ul>
+    <li>DropWizard</li>
+    <li>Play</li>
+    <li>Spring Boot</li>
+    <li>Vertx</li>
+    <li>jHipster</li>
+  </ul>
+  <p>And many other “activators”.</p>
+</section>
+<section id="slide26">
+  <h2>“The theme song of reactive”</h2>
+  <h3>Reduce visibility and complexity of concurrency and distribution by being event or message driven.</h3>
+  <h3>Cut (the impact of) failures by cutting logic to smaller (atomic) service units/services.</h3>
+</section>
+<section id="slide27">
+  <h2>Und jetzt?</h2>
+  <ul>
+    <li>Leverage message/event driven middleware:
+    <ul><li>Using a message broker to decouple, more elastic &amp; resilient systems,</li></ul></li>
+    <li>Try to develop streams instead of flows:
+    <ul><li>Focus on what, not where.</li></ul></li>
+</section>
+<section id="slide28">
+  <h2>But...</h2>
+  <ul>
+    <li>Reactive is not magic, (ie. your life doesn't 'just get easier'.),</li>
+    <li>Reactive will not improve the (individual) response times of your application,</li>
+    <li>A ReST call will still be a ReST call!</li>
+  </ul>
+  <p>Creating a reactive system will make it easier to build (more) scalable (more) robust applications.</p>
+</section>
+<section id="slide29">
+  <h2>My olde Swing application</h2>
+  <pre><code>
+someButton.addActionListener(evt -> {
+  try {
+    service.doAction();
+    closeWindow();
+  } catch (ServiceException e) {
+    showError(e.getMessage());
+  }
+});
+  </code></pre>
+</section>
+<section id="slide30">
+  <h2>My less olde Swing application</h2>
+  <pre><code>
+someButton.addActionListener(evt -> {
+  promise(() -> service.doAction())
+    .onComplete(() -> closeWindow()).
+    .orError((e) -> showError(e.getMessage())
+    .go();
+});
+
+  </code></pre>
+</section>
+<section id="slide31">
+  <h2>My less olde Swing application</h2>
+  <pre><code>
+someButton.addActionListener(evt -> {
+  do(this::action);
+});
+
+void action() {
+  service.doAction(this::closeWindow, this::showError);
+}
+  </code></pre>
+</section>
+<section id="slide32">
+  <h2>My less olde Swing application</h2>
+  <pre><code>
+someButton.addActionListener(evt -> {
+  promise(service::getData)
+    .onNext(this.listModel::add)
+    .onComplete(this::closeWindow)
+    .orError(this::showError)
+    .go();
+});  </code></pre>
+</section>
+<section id="slide33">
+  <h2>My less olde Swing application</h2>
+  <pre><code>
+someButton.addActionListener(evt -> {
+  do(this::action, this::closeWindow);
+});
+
+void action() {
+  service.getData(listModel::add, this::showError);
+}
+  </code></pre>
+</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			Reveal.initialize({
+				progress: true,
+				center: true,
+				slideNumber: true,
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+	</body>
+</html>
